@@ -18,10 +18,17 @@
     </properties>
 
     <dependencies>
+        <!--Persistence-->
         <dependency>
             <groupId>com.wenthor</groupId>
             <artifactId>persistence</artifactId>
         </dependency>
+        <!--Mail-->
+        <dependency>
+            <groupId>com.wenthor</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+        <!--Security-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>

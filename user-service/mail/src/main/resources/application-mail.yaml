@@ -1,0 +1,20 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: mail
+    password: service
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: digitopiacasestudy@gmail.com
+    password: yaghkbtgeuotdald
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+rabbit:
+  queue: "mail-queue"
+  exchange: "mail-exchange"
+  routing: "mail-exchange"

@@ -3,14 +3,16 @@ package com.wenthor.service;
 import com.wenthor.IndustryServiceClient;
 import com.wenthor.bo.LoginResponseBO;
 import com.wenthor.bo.UserBO;
+import com.wenthor.bo.VerificationCodeBO;
 import com.wenthor.configuration.FeignClientConfiguration;
 import com.wenthor.enumeration.Status;
 import com.wenthor.exception.UserNotFoundException;
 import com.wenthor.mapper.UserServiceMapper;
+import com.wenthor.model.Notification;
 import com.wenthor.model.User;
+import com.wenthor.mq.producer.NotificationProducer;
 import com.wenthor.repository.UserRepository;
 import com.wenthor.response.IndustryResponse;
-import com.wenthor.response.RestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +29,7 @@ import java.util.UUID;
 @Service
 public class UserService implements IServiceMain<UserBO> {
     private final UserRepository repository;
+    private final NotificationProducer notificationProducer;
     private final IndustryServiceClient industryServiceClient;
     private final VerificationCodeService verificationCodeService;
     private final JwtService jwtService;
@@ -34,11 +37,13 @@ public class UserService implements IServiceMain<UserBO> {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     public UserService(UserRepository repository,
+                       NotificationProducer notificationProducer,
                        IndustryServiceClient industryServiceClient,
                        VerificationCodeService verificationCodeService,
                        JwtService jwtService,
                        PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.notificationProducer = notificationProducer;
         this.industryServiceClient = industryServiceClient;
         this.verificationCodeService = verificationCodeService;
         this.jwtService = jwtService;
@@ -64,16 +69,19 @@ public class UserService implements IServiceMain<UserBO> {
                     .build();
             User userSave = this.repository.save(po);
             logger.debug("Create User Register Data: {}", userSave);
-            this.verificationCodeService.create(UserServiceMapper.convertToBO(userSave));
+            VerificationCodeBO verification = this.verificationCodeService.create(UserServiceMapper.convertToBO(userSave));
             UserBO response = UserServiceMapper.convertToBO(userSave);
             logger.debug("Create User Response: {}", response);
+            this.sendNotification(userBO.email(),userBO.fullName(),verification.code());
             return response;
-        } else if (!isFullNameValid(userBO.email()))
+        } else if (!isUserEmailUnique(userBO.email()))
             throw new IllegalArgumentException("This email address is already in use, please try another email address.");
         throw new IllegalArgumentException("Unexpected values were sent during registration. Your request has been rejected.");
     }
     public LoginResponseBO login(String email, String password){
         UserBO bo = this.findByEmail(email);
+        if(bo.enabled())
+            throw new IllegalArgumentException("Your account has been suspended. Please verify your account." );
         if(this.passwordEncoder.matches(password, bo.password())){
             final String jwt = this.jwtService.generateToken(bo.email());
             return UserServiceMapper.convertToLoginBO(
@@ -158,12 +166,14 @@ public class UserService implements IServiceMain<UserBO> {
             logger.debug("User updateByID orginal data: {}", orginalBO);
             if (updateUserControl(orginalBO, updateBO)) {
                 User po = updateUser(token,orginalBO, updateBO);
-                if (po.getEnabled())
-                    this.verificationCodeService.create(UserServiceMapper.convertToBO(po));
                 User updatePO = this.repository.save(po);
                 logger.debug("User updateByID update data: {}", po);
                 UserBO response = UserServiceMapper.convertToBO(updatePO);
                 logger.debug("User updateByID response data: {}", response);
+                if (po.getEnabled()){
+                    VerificationCodeBO verification = this.verificationCodeService.create(UserServiceMapper.convertToBO(po));
+                    this.sendNotification(response.email(),response.fullName(),verification.code());
+                }
                 return response;
             }
         }
@@ -178,12 +188,14 @@ public class UserService implements IServiceMain<UserBO> {
             logger.debug("User updateByEmail orginal data: {}", orginalBO);
             if (updateUserControl(orginalBO, updateBO)) {
                 User po = updateUser(token,orginalBO, updateBO);
-                if (po.getEnabled())
-                    this.verificationCodeService.create(UserServiceMapper.convertToBO(po));
                 User updatePO = this.repository.save(po);
                 logger.debug("User updateByEmail update data: {}", po);
                 UserBO response = UserServiceMapper.convertToBO(updatePO);
                 logger.debug("User updateByEmail response data: {}", response);
+                if (po.getEnabled()){
+                    VerificationCodeBO verification = this.verificationCodeService.create(UserServiceMapper.convertToBO(po));
+                    this.sendNotification(response.email(),response.fullName(),verification.code());
+                }
                 return response;
             }
         }
@@ -283,7 +295,15 @@ public class UserService implements IServiceMain<UserBO> {
         UserBO bo = UserServiceMapper.convertToBO(saveUser);
         return bo;
     }
-
+    private void sendNotification(String email, String fullName, String verification){
+        Notification notification = new Notification.Builder()
+                .mail(email)
+                .code(verification)
+                .fullName(fullName)
+                .url("http://localhost:8081/validate/".concat(verification))
+                .build();
+        this.notificationProducer.sendToQueue(notification);
+    }
     private User updateUser(String token, UserBO orginalBO, UserBO updateBO){
         final String byAccountEmail = this.jwtService.findByAccountEmail(token);
         final UserBO bo = this.findByEmail(byAccountEmail);
@@ -317,7 +337,7 @@ public class UserService implements IServiceMain<UserBO> {
         return !present;
     }
     private boolean isFullNameValid(String fullName) {
-        return fullName.matches("^[a-zA-Z ]+$");
+        return fullName.matches("^[a-zA-ZğüşıöçĞÜŞİÖÇ ]+$");
     }
     private String normalizeFullName(String fullName) {
         final String normalized = fullName.trim().toLowerCase()

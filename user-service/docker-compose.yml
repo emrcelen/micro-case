@@ -28,6 +28,15 @@ services:
       - wenthor-network
     restart: always
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      - RABBITMQ_DEFAULT_USER=mail
+      - RABBITMQ_DEFAULT_PASS=service
+
 networks:
   wenthor-network:
     driver: bridge

@@ -20,6 +20,7 @@
 		<module>service</module>
 		<module>rest</module>
         <module>client</module>
+        <module>mail</module>
     </modules>
 
 	<properties>
@@ -52,6 +53,11 @@
 			<dependency>
 				<groupId>com.wenthor</groupId>
 				<artifactId>client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.wenthor</groupId>
+				<artifactId>mail</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
