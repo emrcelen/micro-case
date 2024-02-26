@@ -1,0 +1,36 @@
+server:
+  port: 8887
+
+spring:
+  application:
+    name: user-service
+  config:
+    import:
+      - "application-persistence.yaml"
+      - "application-service.yaml"
+  output:
+    ansi:
+      enabled: ALWAYS
+info:
+  component: User Management Application
+  version: 0.0.1
+
+openapi:
+  service:
+    title: user-service doc
+    version: 1.0.0
+    url: http://localhost:8081
+springdoc:
+  api-docs:
+    path: /user-service/v3/api-docs
+  swagger-ui:
+    path: /user-service/swagger-ui.html
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8080/eureka
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${random.uuid}
+    prefer-ip-address: true
