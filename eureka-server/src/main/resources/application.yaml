@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: eureka-server
+  output:
+    ansi:
+      enabled: ALWAYS
+
+info:
+  component: Eureka Server Application
+  version: 0.0.1
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetchRegistry: 'false'
+    registerWithEureka: 'false'
