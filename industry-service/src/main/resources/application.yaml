@@ -1,0 +1,46 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: industry-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+  datasource:
+    url: "jdbc:mysql://localhost:3306/industry_management"
+    username: root
+    password: root
+  output:
+    ansi:
+      enabled: ALWAYS
+
+info:
+  component: Industry Management Application
+  version: 0.0.1
+
+openapi:
+  service:
+    title: industry-service doc
+    version: 1.0.0
+    url: http://localhost:8081
+springdoc:
+  api-docs:
+    path: /industry-service/v3/api-docs
+  swagger-ui:
+    path: /industry-service/swagger-ui.html
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8080/eureka
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${random.uuid}
+    prefer-ip-address: true
+
+security:
+  jwt:
+    secret: 5pAq6zRyX8bC3dV2wS7gN1mK9jF0hL4tUoP6iBvE3nG8xZaQrY7cW2fA
