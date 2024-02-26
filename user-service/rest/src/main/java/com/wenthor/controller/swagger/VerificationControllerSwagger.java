@@ -41,7 +41,7 @@ public interface VerificationControllerSwagger {
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "You can verify your account using this endpoint.")
     @PostMapping(path = "/validate/{code}")
-    ResponseEntity<?> validate(@RequestHeader HttpHeaders headers, @PathVariable(name = "code") String code);
+    ResponseEntity<?> validate(@PathVariable(name = "code") String code);
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "You can request a new code to verify your account using this endpoint.")
     @PostMapping(path = "/refresh")

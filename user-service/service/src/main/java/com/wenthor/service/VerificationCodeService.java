@@ -50,8 +50,7 @@ public class VerificationCodeService implements IServiceMain<VerificationCodeBO>
         }
     }
 
-    public void verification(String token, String code) {
-        String email = this.jwtService.findByAccountEmail(token);
+    public void verification(String code) {
         VerificationCode codePO = this.repository.findByCode(code)
                 .orElseThrow(
                         () -> new VerificationCodeNotFoundException(
@@ -61,8 +60,6 @@ public class VerificationCodeService implements IServiceMain<VerificationCodeBO>
                                 )
                         )
                 );
-        if(!codePO.getUser().getEmail().equals(email))
-            throw new IllegalArgumentException("Your request has been rejected.");
         if (!codePO.getExpiryDate().isAfter(LocalDateTime.now())) {
             this.delete(codePO);
             throw new VerificationCodeExpiredException("Verification code has expired.");

@@ -17,9 +17,8 @@ public class VerificationController implements VerificationControllerSwagger {
     }
 
     @Override
-    public ResponseEntity<?> validate(@RequestHeader HttpHeaders headers, String code) {
-        var token = headers.get(headers.AUTHORIZATION).get(0).substring(7);
-        this.service.verification(token,code);
+    public ResponseEntity<?> validate(String code) {
+        this.service.verification(code);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
