@@ -1,0 +1,51 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: api-gateway
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+  output:
+    ansi:
+      enabled: ALWAYS
+
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: API Gateway Service
+        primaryName: API Gateway Service
+      - url: /user-service/v3/api-docs
+        name: User Service
+        primaryName: User Service
+      - url: /industry-service/v3/api-docs
+        name: Industry Service
+        primaryName: Industry Service
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8080/eureka
+    instance:
+      hostname: localhost
+      instance-id: ${spring.application.name}:${random.uuid}
+      prefer-ip-address: true
+
+
+security:
+  jwt:
+    secret: 5pAq6zRyX8bC3dV2wS7gN1mK9jF0hL4tUoP6iBvE3nG8xZaQrY7cW2fA
