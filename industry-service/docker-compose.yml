@@ -1,0 +1,31 @@
+version: "3.2"
+
+services:
+  db:
+    container_name: industry-service-mysql
+    image: mysql
+    ports:
+      - 3306:3306
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: industry_management
+    volumes:
+        - ./data:/var/lib/mysql
+    networks:
+      - wenthor-network
+
+  adminer:
+    container_name: industry-service-adminer
+    image: adminer
+    restart: always
+    networks:
+      - wenthor-network
+    ports:
+      - 8346:8080
+
+networks:
+  wenthor-network:
+    driver: bridge
