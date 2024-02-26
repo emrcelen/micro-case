@@ -1,0 +1,33 @@
+version: "3.2"
+
+services:
+  db:
+    container_name: user-service-postgresql
+    image: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - wenthor-network
+    restart: always
+    environment:
+      POSTGRES_DB: user_management
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: user-service-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@wenthor.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "8432:80"
+    networks:
+      - wenthor-network
+    restart: always
+
+networks:
+  wenthor-network:
+    driver: bridge
