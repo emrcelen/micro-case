@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="table-users-constraint-v1.0.xml" author="emrecelen">
+        <addNotNullConstraint tableName="users" columnName="full_name" constraintName="nn_full_name"/>
+        <addNotNullConstraint tableName="users" columnName="normalized_name" constraintName="nn_normalized_name"/>
+        <addNotNullConstraint tableName="users" columnName="password" constraintName="nn_password" />
+        <addNotNullConstraint tableName="users" columnName="email" constraintName="nn_email"/>
+        <addUniqueConstraint tableName="users" columnNames="email" constraintName="uk_email"/>
+        <addNotNullConstraint tableName="users" columnName="created" constraintName="nn_created"/>
+        <addNotNullConstraint tableName="users" columnName="created_by" constraintName="nn_created_by"/>
+    </changeSet>
+</databaseChangeLog>

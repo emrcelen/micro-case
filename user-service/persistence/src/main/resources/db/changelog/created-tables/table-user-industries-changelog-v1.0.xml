@@ -1,0 +1,13 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="table-user-industries-changelog-v1.0.xml" author="emrecelen">
+        <createTable tableName="user_industries">
+            <column name="user_id" type="uuid"/>
+            <column name="industry_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

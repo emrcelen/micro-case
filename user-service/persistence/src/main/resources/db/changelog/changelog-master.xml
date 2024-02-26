@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <!--Create table-->
+    <include file="db/changelog/created-tables/table-users-changelog-v1.0.xml"/>
+    <include file="db/changelog/created-tables/table-user-industries-changelog-v1.0.xml"/>
+    <include file="db/changelog/created-tables/table-verification-codes-changelog-v1.0.xml"/>
+
+    <!--Constraint table-->
+    <include file="db/changelog/constraint-tables/table-users-constraint-v1.0.xml"/>
+    <include file="db/changelog/constraint-tables/table-user-industries-constraint-v1.0.xml"/>
+    <include file="db/changelog/constraint-tables/table-verification-codes-constraint-v1.0.xml"/>
+
+    <!--Insert data-->
+</databaseChangeLog>
