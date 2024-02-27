@@ -22,6 +22,8 @@ public class GatewayConfig {
                         .and().method(HttpMethod.GET).uri("lb://user-service"))
                 .route(r -> r.path("/industry-service/v3/api-docs")
                         .and().method(HttpMethod.GET).uri("lb://industry-service"))
+                .route(r -> r.path("/invitation-service/v3/api-docs")
+                        .and().method(HttpMethod.GET).uri("lb://invitation-service"))
                 .route("user-service", r -> r.path(
                                 "/login",
                                 "/register",
@@ -33,6 +35,9 @@ public class GatewayConfig {
                 .route("industry-service", r-> r.path("/industry/**")
                         .filters(f -> f.filter(authenticationFilter))
                         .uri("lb://industry-service"))
+                .route("invitation-service", r-> r.path("/invitation/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                        .uri("lb://invitation-service"))
                 .build();
     }
 }

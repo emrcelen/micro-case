@@ -33,6 +33,9 @@ springdoc:
       - url: /industry-service/v3/api-docs
         name: Industry Service
         primaryName: Industry Service
+      - url: /invitation-service/v3/api-docs
+        name: Invitation Service
+        primaryName: Invitation Service
 
 eureka:
   client:
