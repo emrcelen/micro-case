@@ -31,6 +31,7 @@ public class InvitationServiceMapper {
                 invitation.getUser_id(),
                 invitation.getCreated(),
                 invitation.getUpdated(),
+                invitation.getExpiredDate(),
                 invitation.getCreatedBy(),
                 invitation.getUpdatedBy()
         );
