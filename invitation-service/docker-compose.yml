@@ -1,0 +1,15 @@
+version: "3.2"
+
+services:
+  db:
+    container_name: invitation-service-postgresql
+    image: postgres
+    ports:
+      - "5442:5432"
+    restart: always
+    environment:
+      POSTGRES_DB: invitation_management
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
