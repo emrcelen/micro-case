@@ -13,6 +13,7 @@ public record InvitationBO(
         UUID user_id,
         LocalDateTime created,
         LocalDateTime updated,
+        LocalDateTime expired,
         UUID createdBy,
         UUID updatedBy
 ) {
