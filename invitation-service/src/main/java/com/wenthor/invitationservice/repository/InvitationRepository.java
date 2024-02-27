@@ -1,5 +1,6 @@
 package com.wenthor.invitationservice.repository;
 
+import com.wenthor.invitationservice.enumeration.Status;
 import com.wenthor.invitationservice.model.Invitation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,6 @@ import java.util.List;
 public interface InvitationRepository extends JpaRepository<Invitation, UUID> {
     Optional<Invitation> findByCode(String code);
     List<Invitation> findByUser(UUID user);
-    List<Invitation> findAllByExpiredDateBefore(LocalDateTime currentDate);
+    List<Invitation> findAllByExpiredDateBeforeAndStatus(LocalDateTime currentDate, Status status);
 
 }

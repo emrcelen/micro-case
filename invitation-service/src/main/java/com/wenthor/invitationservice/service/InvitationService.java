@@ -157,7 +157,7 @@ public class InvitationService implements IServiceMain<InvitationBO> {
     }
     @Scheduled(cron = "0 0 0 * * ?")
     public void expireInvitations() {
-        List<Invitation> allByExpiredDateBefore = this.repository.findAllByExpiredDateBefore(LocalDateTime.now());
+        List<Invitation> allByExpiredDateBefore = this.repository.findAllByExpiredDateBeforeAndStatus(LocalDateTime.now(), Status.PENDING);
         if(!allByExpiredDateBefore.isEmpty()){
             allByExpiredDateBefore
                     .forEach(k-> k.setStatus(Status.EXPIRED));
