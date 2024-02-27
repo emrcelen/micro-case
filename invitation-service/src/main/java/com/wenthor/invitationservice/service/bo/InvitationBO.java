@@ -10,7 +10,7 @@ public record InvitationBO(
         String message,
         String code,
         Status status,
-        UUID user_id,
+        UUID user,
         LocalDateTime created,
         LocalDateTime updated,
         LocalDateTime expired,

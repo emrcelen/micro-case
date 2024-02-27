@@ -15,7 +15,7 @@ public class InvitationServiceMapper {
                 .message(bo.message())
                 .code(bo.code())
                 .status(bo.status())
-                .user(bo.user_id())
+                .user(bo.user())
                 .createdDate(LocalDateTime.now())
                 .updatedDate(LocalDateTime.now())
                 .createdBy(bo.createdBy())
@@ -28,7 +28,7 @@ public class InvitationServiceMapper {
                 invitation.getMessage(),
                 invitation.getCode(),
                 invitation.getStatus(),
-                invitation.getUser_id(),
+                invitation.getUser(),
                 invitation.getCreated(),
                 invitation.getUpdated(),
                 invitation.getExpiredDate(),

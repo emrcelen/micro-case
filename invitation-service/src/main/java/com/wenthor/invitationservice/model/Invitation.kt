@@ -16,12 +16,13 @@ data class Invitation(
     val message: String,
     var code: String,
     @Enumerated(EnumType.STRING)
-    val status: Status,
-    var user_id: UUID?,
+    var status: Status,
+    @Column(name = "user_id")
+    var user: UUID?,
     @Column(nullable = false, updatable = false)
     val created: LocalDateTime,
     var updated: LocalDateTime,
-    val expiredDate: LocalDateTime,
+    var expiredDate: LocalDateTime,
     @Column(nullable = false, updatable = false)
     val createdBy: UUID?,
     var updatedBy: UUID?
@@ -33,7 +34,7 @@ data class Invitation(
         builder.message,
         builder.code,
         builder.status,
-        builder.user_id,
+        builder.user,
         builder.created,
         builder.updated,
         builder.expiredDate,
@@ -50,7 +51,7 @@ data class Invitation(
             private set
         var status: Status = Status.PENDING
             private set
-        var user_id: UUID? = null
+        var user: UUID? = null
             private set
         var created: LocalDateTime = LocalDateTime.now()
             private set
@@ -67,7 +68,7 @@ data class Invitation(
         fun message(message: String) = apply { this.message = message }
         fun code(code: String) = apply { this.code = code }
         fun status(status: Status) = apply { this.status = status }
-        fun user(user_id: UUID) = apply { this.user_id = user_id }
+        fun user(user: UUID) = apply { this.user = user }
         fun createdDate(created: LocalDateTime) = apply { this.created = created }
         fun updatedDate(updated: LocalDateTime) = apply { this.updated = updated }
         fun expiredDate(expiredDate: LocalDateTime) = apply { this.expiredDate = expiredDate }
